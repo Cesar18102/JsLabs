@@ -1,0 +1,146 @@
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<script src="vue.js"></script>
+	</head>
+	
+	<body>
+	
+		<div id="greeting">
+			<input v-model="name"></input>
+			<span>Привет, {{ name.trim().length == 0 ? "незнакомец" : name }}</span>
+		</div>
+		
+		<ul id="dogs">
+			<li v-for="(key, value) in items">
+				<span style="color: {{ value.length != 0 ? 'red' : 'black' }};">{{ key }}</span>
+			</li>
+		</ul>
+		
+		<div id="random-dog">
+			<button onclick="loadRandomDog();">Get random dog</button>
+			<br/>
+			<span>{{ name }}</span>
+			<ul style="text-indent : 2vw;">
+				<li v-for="sub in subs">
+					<span>{{ sub }}</span>
+				</li>
+			</ul>
+		</div>
+		
+		<div id="random-dog-list">
+			<button onclick="addRandomDog();">Add random dog</button>
+			<button onclick="removeRandomDog();">Remove random dog</button>
+			<button onclick="mixDogList();">Mix</button>
+			
+			<li v-for="item in items">
+				<span>{{ item.name }}</span>
+			</li>
+		
+		</div>
+		
+	</body>
+	
+	<script>
+	
+		function getRandomInt(min, max) {
+			return Math.floor(Math.random() * (max - min)) + min;
+		}
+
+		function sendRequest(method, url, callback) {
+			let request = new XMLHttpRequest();
+			request.open(method, url);
+			request.onload = () => callback(request.response);
+			request.send();
+		}
+		
+		function getDogsList(callback) {
+			sendRequest(
+				"GET",
+				"https://dog.ceo/api/breeds/list/all",
+				(response) => callback(JSON.parse(response))
+			);
+		}
+		
+		function getRandomDog(callback) {
+			getDogsList((dogList) => {
+				let keys = Object.keys(dogList.message);
+				let values = Object.values(dogList.message);
+				
+				let randomDogIndex = getRandomInt(0, keys.length);
+				let randomDog = { name : keys[randomDogIndex], subs : values[randomDogIndex] };
+					
+				callback(randomDog);
+			});
+		}
+		
+		/*<TASK1>*/
+		
+		let greetingView = new Vue({
+			el: "#greeting",
+			data: { name }
+		});
+		
+		/*</TASK1>*/
+		
+		/*<TASK2>*/
+		
+		getDogsList((dogList) => {
+			let dogsView = new Vue({
+				el: "#dogs",
+				data: { items : dogList.message }
+			});
+		});
+		
+		/*</TASK2>*/
+		
+		/*<TASK3>*/
+		
+		let randomDogData = {
+			name : "Random Dog",
+			subs : []
+		};
+		
+		let randomDogView = new Vue({
+			el: "#random-dog",
+			data: randomDogData
+		});	
+		
+		function loadRandomDog() {
+			getRandomDog((randomDog) => {
+				Object.assign(randomDogData, randomDog);
+			});
+		}
+		
+		/*</TASK3>*/
+		
+		/*<TASK4>*/
+		
+		let randomDogList = { items : [] };
+		let randomDogListView = new Vue({
+			el: "#random-dog-list",
+			data: randomDogList
+		});
+		
+		function addRandomDog() {
+			getRandomDog((randomDog) => {
+				randomDogList.items.push(randomDog);
+			});
+		}
+		
+		function removeRandomDog() {
+			if(randomDogList.items.length == 0)
+				return;
+		
+			let index = getRandomInt(0, randomDogList.items.length);
+			randomDogList.items.splice(index, 1);
+		}
+		 
+		function mixDogList() {
+			randomDogList.items.sort((a, b) => Math.random() > 0.5 ? 1 : -1);
+		}
+		
+		/*</TASK4>*/
+	
+	</script>
+</html>
