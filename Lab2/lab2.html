@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		
+		<link rel="stylesheet" href="lab2.css"/>
+		
+		<script src="vue.js"></script>
+		<script src="lab2.js"></script>
+	</head>
+	<body onload="initDataBinding();">
+	
+		<table cellspacing="10">
+			<tr>
+				<td>
+					<div id="all-dogs-selector-wrapper">
+						<select size="40" multiple>
+							<option v-for="dog in dogData.dogs" v-bind:value="dog">{{ dog }}</option>
+						</select>
+					</div>
+				</td>
+				
+				<td>
+					<div id="all-dogs-selector-component-wrapper">
+						<dog-list id="all-dogs-selector-component" v-bind:class="classObject"></dog-list>
+					</div>
+				</td>
+				
+				<td>
+					<div id="dogs-selected-list-wrapper">
+						<dog-list id="dogs-selected-list" list-title="SELECTED DOGS LIST" option-class="list-option" v-bind:class="classObject"></dog-list>
+					</div>
+				</td>
+				
+				<td valign="top">
+					<div id="custom-all-dogs-selector-component-wrapper">
+						<custom-dog-list id="custom-all-dogs-selector-component" 
+									     list-title="CUSTOM DOGS LIST"  
+										 v-bind:class="classObject">
+						</custom-dog-list>
+					</div>
+				</td>
+				
+				<td valign="top">
+					<div id="custom-dogs-selected-list-wrapper">
+						<custom-dog-list id="custom-dogs-selected-list" 
+										 v-on:selection-changed="selectionChangedHandler()" 
+										 list-title="CUSTOM SELECTED DOGS LIST" 
+										 option-class="list-option" 
+										 v-bind:class="classObject">
+						</custom-dog-list>
+					</div>
+				</td>
+			</tr>
+		</table>
+		
+	</body>
+</html>

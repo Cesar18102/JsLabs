@@ -1,0 +1,39 @@
+#all-dogs-selector-wrapper {
+	display : inline;
+}
+
+#all-dogs-selector-component-wrapper, #dogs-selected-list-wrapper, #custom-all-dogs-selector-component-wrapper, #custom-dogs-selected-list-wrapper {
+	display : inline;
+	
+	margin-left : 2vw;
+}
+
+#custom-all-dogs-selector-component-wrapper, #custom-dogs-selected-list-wrapper, #custom-all-dogs-selector-component, #custom-dogs-selected-list {
+	max-height : 90vh;
+	overflow-y : scroll;
+}
+
+.list-option {
+	color : red;
+	font-weight : bold;
+}
+
+.active {
+	background-color : #6666FF;
+}
+
+.error {
+	background-color : orange;
+}
+
+.custom-list-option, .custom-list-option-selected {
+	user-select : none;
+}
+
+.custom-list-option {
+	background-color : yellow;
+}
+
+.custom-list-option-selected {
+	background-color : red;
+}
