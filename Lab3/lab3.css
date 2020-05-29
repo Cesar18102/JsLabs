@@ -1,0 +1,60 @@
+html, body {
+	margin : 0;
+	padding : 0;
+}
+
+.content {
+	width : 100vw;
+	height : calc(100vh - 4em);
+}
+
+.default-list {
+	width : calc(100% - 4em);
+	height : calc(100% - 4em);
+	
+	padding : 2em;
+	overflow-y : scroll;
+}
+
+.default-list-item {
+	margin-bottom : 1em;
+	padding : 0.7em 1em;
+	box-shadow: 0em 0.25em 0.5em 0em rgba(0,0,0,0.2);
+}
+
+.default-sampler {
+	width : 1.5em;
+	height : 1.5em;
+	
+	top : 0.2em;
+	position : relative;
+	margin-right : 0.5em;
+	display : inline-block;
+	
+	border-radius : 0.2em;
+	border : 0.05em solid rgb(53, 54, 58);
+}
+
+.match-id {
+	
+}
+
+.match-time {
+	font-weight : bold;
+}
+
+.team-logo {
+	width : 2em;
+	height : 2em;
+	
+	border-radius : 1em;
+	
+	background-size: cover;
+	background-position: center;
+	background-repeat : no-repeat;
+	background-image : var(--img);
+}
+
+.team-rate {
+	color : var(--rateColor);
+}

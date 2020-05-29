@@ -1,0 +1,15 @@
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<link rel="stylesheet" href="lab3.css"/>
+		<script src="vue.js"></script>
+		<script src="lab3.js"></script>
+	</head>
+	<body onload="initDataBinding();">
+	
+		<div id="matches" class="default-list">
+			<match v-for="match of matches" v-bind:match="match" class="default-list-item"></match>
+		</div>
+		
+	</body>
+</html>
