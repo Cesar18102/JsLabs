@@ -12,6 +12,10 @@ class OpenDotaClient {
 		this.#getMatches(matches => {
 			let teams = [];
 			for(let match of matches) {
+				if(match.radiant_team_id == null || match.radiant_team_id == undefined || match.dire_team_id == null || match.dire_team_id == undefined) {
+					continue;
+				}
+				
 				let radiant_index = teams.findIndex(team => team.id == match.radiant_team_id);
 				if(radiant_index == -1) {
 					teams.push({
@@ -79,10 +83,11 @@ class OpenDotaClient {
 	#getTeams = function(ids, callback) {
 		let teamsData = [];
 		for(let id of ids) {
+			let tid = id;
 			sendRequest(
 				"GET", "https://api.opendota.com/api/teams/" + id, 
 				team => {
-					teamsData.push(this.#parseTeam(team));
+					teamsData.push(this.#parseTeam(team, tid));
 					if(teamsData.length == ids.length) {
 						callback(teamsData);
 					}
@@ -91,7 +96,11 @@ class OpenDotaClient {
 		}
 	}
 	
-	#parseTeam = function(team) {
+	#parseTeam = function(team, id) {
+		if(team == "") {
+			return { team_id : id };
+		}
+		
 		let data = JSON.parse(team);
 		return {
 			team_id : data.team_id,
@@ -132,10 +141,15 @@ function initComponents() {
 		`<div>
 			<center>
 				<div v-bind:style="team.logo_url | urlToCssProp" class="team-logo"></div>
-				<div>{{ team.name }}</div>
-				<div>Побед: {{ team.wins }}</div>
-				<div>Поражений: {{ team.losses }}</div>
-				<div v-bind:style="team.rating | ratingColor" class="team-rate">Рейтинг: {{ team.rating }}</div>
+				<div v-if="team != undefined && team.name != undefined">{{ team.name }}</div>
+				<div v-if="team == undefined || team.name == undefined">*Unknown*</div>
+				<div v-if="team != undefined && team.wins != undefined">Побед: {{ team.wins }}</div>
+				<div v-if="team == undefined || team.wins == undefined">Побед: ?</div>
+				<div v-if="team != undefined && team.losses != undefined">Поражений: {{ team.losses }}</div>
+				<div v-if="team == undefined || team.losses == undefined">Поражений: ?</div>
+				<div v-bind:style="team.rating | ratingColor" class="team-rate" 
+					 v-if="team != undefined && team.rating != undefined">Рейтинг: {{ team.rating }}</div>
+				<div v-if="team == undefined || team.rating == undefined">Рейтинг: ?</div>
 			</center>
 		</div>`
 	});
@@ -144,7 +158,7 @@ function initComponents() {
 		props: ['match'],
 		methods : {
 			removeMatch : function() {
-				let matchIndex = this._context.$data.matches.findIndex(match => match.match_id = this.match.match_id);
+				let matchIndex = this._context.$data.matches.findIndex(match => match.match_id == this.match.match_id);
 				this._context.$data.matches.splice(matchIndex, 1);
 			}
 		}, template : 
